@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <!--引入刚刚下载的Echarts文件-->
+        <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+        <!--引入主题-->
+        <script src="./westeros.js"></script>
+        <!--引入jQuery-->
+        <script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
+    </head>
+
+    <body>
+        
+        <!--在绘图前我们需要为ECharts 准备一个定义了宽高的DOM-->
+        <div id="main" style="width: 600px;height: 400px;"></div>
+        <!--我再准备一个饼图的dom-->
+        <div id="bing" style="width: 600px;height: 400px;"></div>
+        <!--测试异步加载数据，再准备一个dom-->
+        <div id='yibu' style="width: 600px;height: 400px;"></div>
+        
+        <script type="text/javascript">
+        //然后就可以通过Echarts.init方法初始化一个Echarts实例并通过setOtion方法生成一个简单的柱状图
+        var myChart = echarts.init(document.getElementById('main'),'westeros');
+
+        // 指定图表的配置项和数据
+        var option={
+            //为图表配置标题
+            title:{
+                text:'ECharts 入门示例',
+                x:'center' //控制该属性的显示位置
+            },
+
+            //配置提示信息
+            tooltip:{},
+
+            //图例组件，展现了不同系列的标记，颜色和名字可以通过点击图例控制哪些系列不显示
+            legend:{
+                data:['销量'],
+                x:'right'
+            },
+
+            //X轴 配置要在X轴显示的项
+            xAxis:{
+                data:['衬衫','羊毛衫','雪纺衫','裤子','高跟鞋','袜子']
+            },
+
+            //Y轴 配置要在Y轴显示的项
+            yAxis:{},
+
+            //系列列表 每个系列通过type决定自己的图表类型
+            series:[
+                {
+                    name:'销量',
+                    type:'bar',
+                    data:[5,20,36,10,10,20]
+                }
+            ]
+
+        };
+
+        // 使用刚指定的配置项和数据显示图表
+        myChart.setOption(option);
+
+
+
+
+        //*******下面要画一个饼图*******
+        //基于准备好的dom，爷要初始化Echarts实例
+        //ECharts4 开始，除了默认主题外，内置了两套主题，分别为 light 和 dark。
+        var bingtu=echarts.init(document.getElementById('bing'),'westeros');// dark 可尝试修改为 light
+
+        //指定图表的配置项和数据
+        var option1={
+                title:{
+                    text:'某站点用户访问来源',
+                    x:'center'
+                },
+                //系列列表 每个系列通过type决定自己的图表类型
+                series:[{
+                    name:['访问来源'],  // 这个属性不显示，可能4和5的区别，先放着 后面看看咋回事
+                    type:'pie',        // 设置图表类型为饼图
+                    radius:'55%',      // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                    roseType:'angle',  // 这个属性的作用是它会按比例显示扇形的层次关系
+                    data:[             // 数据数组，name 为数据项名称，value 为数据项值
+                        {value:235, name:'视频广告'},
+                        {value:274, name:'联盟广告'},
+                        {value:310, name:'邮件营销'},
+                        {value:335, name:'直接访问'},
+                        {value:400, name:'搜索引擎'}
+                    ],
+
+                    //阴影的配置
+                    //itemStyle 参数可以设置诸如阴影、透明度、颜色、边框颜色、边框宽度等：
+                    itemStyle:{
+                        normal:{
+                            shadowBlur:20,
+                            shadowColor:'rgba(0,0,0,1)'
+                        }
+                    },
+
+                    //下面这个高亮样式太丑了，锦上添shit，特此注释，知道有这个东西就好
+                    //高亮样式
+                    // emphasis:{
+                    //     itemStyle:{
+                    //         //高亮时点的颜色
+                    //         color:'purple'
+                    //     },
+                       
+                    //     //这个高亮后标签文字的效果在Echarts5上不支持了
+                    //     lable:{
+                    //          shaow:true
+                    //         //高亮时标签的文字
+                    //         formatter:'高亮时显示的标签内容'
+                    //     }
+                    // }
+                }]
+        };
+        
+        //使用刚指定的配置项和数据显示图表。
+        bingtu.setOption(option1)
+
+
+        //ECharts异步加载数据
+        // 基于准备好的dom，初始化echarts实例
+        var yibu1=echarts.init(document.getElementById('yibu'));
+        //myChart.showLoading();  // 开启 loading 效果
+        $.get('./echarts_test_data.json',function(data){
+            alert("可以看到 loading 字样。"); // 测试代码，用于查看 loading 效果
+			myChart.hideLoading();  // 隐藏 loading 效果
+            yibu1.setOption({
+                series:[{
+                    name:'访问来源',
+                    type:'pie',  //设置图表类型为饼图
+                    radius:'55%',//饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                    data:data.data_pie
+                }]
+            })
+
+        },'json')
+
+
+
+
+        </script> 
+    </body>
+</html>
