@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <!--引入刚刚下载的Echarts文件-->
+        <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+        <!--引入主题-->
+        <script src="./westeros.js"></script>
+        <!--引入jQuery-->
+        <script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
+    </head>
+	
+	<body>
+        
+        <!--在绘图前我们需要为ECharts 准备一个定义了宽高的DOM-->
+        <div id="main" style="width: 600px;height: 400px;"></div>
+		<script>
+			var myChart = echarts.init(document.getElementById('main'));
+
+				$.get('data.json').done(function(data) {
+				  // data 的结构:
+				  // {
+				  //     categories: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"],
+				  //     values: [5, 20, 36, 10, 10, 20]
+				  // }
+				  myChart.setOption({
+					title: {
+					  text: '异步数据加载示例'
+					},
+					tooltip: {},
+					legend: {},
+					xAxis: {
+					  data: data.categories
+					},
+					yAxis: {},
+					series: [
+					  {
+						name: '销量',
+						type: 'bar',
+						data: data.data
+					  }
+					]
+				  });
+				});
+		</script>
+  </body>
+</html>

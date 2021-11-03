@@ -1,0 +1,14 @@
+{
+  "name": "package",
+  "version": "1.0.0",
+  "description": "",
+  "main": "echarts.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+"scripts": {
+    "start": "live-server --open=./html/index.html --port=8088 --proxy=/proxy:http://127.0.0.1:8080/"
+ }

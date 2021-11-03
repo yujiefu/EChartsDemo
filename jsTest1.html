@@ -10,7 +10,7 @@
         <script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
     </head>
 
-    <body>
+
         
         <!--在绘图前我们需要为ECharts 准备一个定义了宽高的DOM-->
         <div id="main" style="width: 600px;height: 400px;"></div>
@@ -76,9 +76,14 @@
                     text:'某站点用户访问来源',
                     x:'center'
                 },
+                legend: {
+                     orient: 'vertical',
+                     left: 'left',
+                      data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+                 },
                 //系列列表 每个系列通过type决定自己的图表类型
                 series:[{
-                    name:['访问来源'],  // 这个属性不显示，可能4和5的区别，先放着 后面看看咋回事
+                    name:'访问来源',  // 这个属性不显示，可能4和5的区别，先放着 后面看看咋回事
                     type:'pie',        // 设置图表类型为饼图
                     radius:'55%',      // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
                     roseType:'angle',  // 这个属性的作用是它会按比例显示扇形的层次关系
@@ -99,7 +104,7 @@
                         }
                     },
 
-                    //下面这个高亮样式太丑了，锦上添shit，特此注释，知道有这个东西就好
+                    //下面这个高亮样式太丑了，特此注释，知道有这个东西就好
                     //高亮样式
                     // emphasis:{
                     //     itemStyle:{
@@ -121,23 +126,49 @@
         bingtu.setOption(option1)
 
 
-        //ECharts异步加载数据
-        // 基于准备好的dom，初始化echarts实例
-        var yibu1=echarts.init(document.getElementById('yibu'));
-        //myChart.showLoading();  // 开启 loading 效果
-        $.get('./echarts_test_data.json',function(data){
-            alert("可以看到 loading 字样。"); // 测试代码，用于查看 loading 效果
-			myChart.hideLoading();  // 隐藏 loading 效果
-            yibu1.setOption({
-                series:[{
-                    name:'访问来源',
-                    type:'pie',  //设置图表类型为饼图
-                    radius:'55%',//饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
-                    data:data.data_pie
-                }]
-            })
 
-        },'json')
+        //*********ECharts异步加载数据*********
+
+        // 基于准备好的dom，初始化echarts实例
+        var yibu1 = echarts.init(document.getElementById('yibu'));
+			// 显示标题，图例和空的坐标轴
+			yibu1.setOption({
+			  title: {
+				text: '异步数据加载示例'
+			  },
+			  tooltip: {},
+			  legend: {
+				data: ['销量']
+			  },
+			  xAxis: {
+				data: []
+			  },
+			  yAxis: {},
+			  series: [
+				{
+				  name: '销量',
+				  type: 'bar',
+				  data: []
+				}
+			  ]
+			});
+
+			// 异步加载数据
+			$.get('data.json').done(function(data) {
+			  // 填入数据
+			  myChart.setOption({
+				xAxis: {
+				  data: data.name
+				},
+				series: [
+				  {
+					// 根据名字对应到相应的系列
+					name: '销量',
+					data: data.data
+				  }
+				]
+			  });
+			});
 
 
 
